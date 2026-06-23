@@ -37,8 +37,38 @@ A premium, responsive web application built with **Python Flask** and **Vanilla 
    The application will start running at [http://127.0.0.1:5000/](http://127.0.0.1:5000/).
 
 ## File Structure
-- `app.py` - Flask backend with XML feed parsing, BS4 item separation, and cache handling.
-- `requirements.txt` - Python project dependencies.
-- `templates/index.html` - Premium UI structure with responsive filters, timeline feed, compose modals, and icons.
-- `static/css/style.css` - Custom styling utilizing sleek dark theme design, glassmorphism, responsive grids, status indicators, and transitions.
-- `static/js/app.js` - Client-side state management, search filters, modal controller, API integrations, clipboard interaction, and skeletons.
+- [app.py](file:///C:/Users/harsh/agy-cli-projects/app.py) - Flask backend with XML feed parsing, BeautifulSoup item separation, and cache handling.
+- [requirements.txt](file:///C:/Users/harsh/agy-cli-projects/requirements.txt) - Python project dependencies.
+- [templates/index.html](file:///C:/Users/harsh/agy-cli-projects/templates/index.html) - Premium UI structure with responsive filters, timeline feed, compose modals, and icons.
+- [static/css/style.css](file:///C:/Users/harsh/agy-cli-projects/static/css/style.css) - Custom styling utilizing sleek dark theme design, glassmorphism, responsive grids, status indicators, and transitions.
+- [static/js/app.js](file:///C:/Users/harsh/agy-cli-projects/static/js/app.js) - Client-side state management, search filters, modal controller, API integrations, clipboard interaction, and skeletons.
+- [.gitignore](file:///C:/Users/harsh/agy-cli-projects/.gitignore) - Prevents temporary files, caches, virtual environments, and editor configurations from being committed.
+
+## Version Control & GitHub Integration
+
+This project is fully initialized as a local Git repository tracking the `main` branch and linked to the remote GitHub repository:
+`https://github.com/harshraj199556-dot/Harsh-event-talks-app.git`
+
+### Useful Git Commands
+- **Check Status**:
+  ```bash
+  git status
+  ```
+- **Push Local Changes**:
+  ```bash
+  git add .
+  git commit -m "Your commit message"
+  git push
+  ```
+
+### GitHub CLI (gh) Integration
+We have installed the GitHub CLI (`gh`) on this system. You can use it to manage pull requests, issues, releases, and repository settings from your command line:
+1. **Authenticate**:
+   ```bash
+   gh auth login
+   ```
+2. **View Repository Status**:
+   ```bash
+   gh repo view
+   ```
+
