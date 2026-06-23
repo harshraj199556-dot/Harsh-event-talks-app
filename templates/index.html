@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse, search, filter, and tweet the latest Google BigQuery release notes and updates in real-time.">
+    <title>BigQuery Release Notes Tracker</title>
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container header-container">
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <!-- Custom SVG Database logo -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                        <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
+                    </svg>
+                </div>
+                <div class="brand-title">
+                    <h1>BigQuery Release Notes</h1>
+                    <p id="last-updated">Checking updates...</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="btn btn-refresh" id="refresh-btn" title="Fetch fresh release notes">
+                    <svg class="refresh-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                    </svg>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Top Metrics Cards -->
+        <section class="stats-container">
+            <div class="stat-card">
+                <span class="stat-label">Total Updates</span>
+                <span class="stat-value" id="total-count">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Features</span>
+                <span class="stat-value" id="feature-count" style="color: var(--color-feature);">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Announcements</span>
+                <span class="stat-value" id="announcement-count" style="color: var(--color-announcement);">-</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Other Items</span>
+                <span class="stat-value" id="other-count" style="color: var(--text-secondary);">-</span>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid Layout -->
+        <div class="dashboard-grid">
+            
+            <!-- Filters Sidebar -->
+            <aside class="sidebar-panel">
+                <div class="filter-section">
+                    <h2 class="filter-title">Search</h2>
+                    <div class="search-wrapper">
+                        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" class="search-input" id="search-input" placeholder="Search keywords, dates...">
+                    </div>
+                </div>
+
+                <div class="filter-section" style="margin-top: 24px;">
+                    <h2 class="filter-title">Categories</h2>
+                    <div class="category-pills">
+                        <button class="category-pill active" data-category="ALL" style="--active-border-color: var(--bq-blue-light); --active-bg-color: rgba(56, 189, 248, 0.1); --active-text-color: var(--text-primary);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--bq-blue-light)"></span>
+                                All Notes
+                            </span>
+                            <span class="category-count" id="count-all">-</span>
+                        </button>
+                        
+                        <button class="category-pill" data-category="Feature" style="--active-border-color: var(--color-feature); --active-bg-color: var(--color-feature-bg); --active-text-color: var(--color-feature); --active-count-bg: rgba(16, 185, 129, 0.2);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--color-feature)"></span>
+                                Features
+                            </span>
+                            <span class="category-count" id="count-feature">-</span>
+                        </button>
+                        
+                        <button class="category-pill" data-category="Announcement" style="--active-border-color: var(--color-announcement); --active-bg-color: var(--color-announcement-bg); --active-text-color: var(--color-announcement); --active-count-bg: rgba(14, 165, 233, 0.2);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--color-announcement)"></span>
+                                Announcements
+                            </span>
+                            <span class="category-count" id="count-announcement">-</span>
+                        </button>
+                        
+                        <button class="category-pill" data-category="Changed" style="--active-border-color: var(--color-changed); --active-bg-color: var(--color-changed-bg); --active-text-color: var(--color-changed); --active-count-bg: rgba(245, 158, 11, 0.2);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--color-changed)"></span>
+                                Changed
+                            </span>
+                            <span class="category-count" id="count-changed">-</span>
+                        </button>
+                        
+                        <button class="category-pill" data-category="Fixed" style="--active-border-color: var(--color-fixed); --active-bg-color: var(--color-fixed-bg); --active-text-color: var(--color-fixed); --active-count-bg: rgba(139, 92, 246, 0.2);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--color-fixed)"></span>
+                                Fixed
+                            </span>
+                            <span class="category-count" id="count-fixed">-</span>
+                        </button>
+                        
+                        <button class="category-pill" data-category="Deprecated" style="--active-border-color: var(--color-deprecated); --active-bg-color: var(--color-deprecated-bg); --active-text-color: var(--color-deprecated); --active-count-bg: rgba(239, 68, 68, 0.2);">
+                            <span style="display: flex; align-items: center;">
+                                <span class="category-dot" style="color: var(--color-deprecated)"></span>
+                                Deprecated
+                            </span>
+                            <span class="category-count" id="count-deprecated">-</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Feed Section -->
+            <section class="main-panel">
+                <div class="feed-header" style="margin-bottom: 16px;">
+                    <h2>Updates Feed</h2>
+                    <div class="feed-status">
+                        <span class="feed-status-dot"></span>
+                        <span>Feed Sync Online</span>
+                    </div>
+                </div>
+                
+                <div class="feed-container" id="feed-container">
+                    <!-- JavaScript will inject cards or skeleton loaders here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Tweet Composer Modal -->
+    <div class="modal-overlay" id="tweet-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-header-title">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    Compose Tweet
+                </h3>
+                <button class="modal-close-btn" id="modal-close-btn" aria-label="Close Modal">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <span class="modal-label">Tweet Preview</span>
+                <div class="tweet-editor-wrapper">
+                    <textarea class="tweet-textarea" id="tweet-textarea" placeholder="What's happening?"></textarea>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <!-- Circular character counter -->
+                <div class="char-count-wrapper">
+                    <svg class="progress-ring" width="28" height="28">
+                        <circle class="progress-ring__circle-bg" stroke-width="2.5" fill="transparent" r="10" cx="14" cy="14"/>
+                        <circle class="progress-ring__circle" stroke-width="2.5" fill="transparent" r="10" cx="14" cy="14"/>
+                    </svg>
+                    <span class="char-count-text" id="char-count-text">280</span>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" id="cancel-tweet-btn">Cancel</button>
+                    <button class="btn btn-outline" id="copy-tweet-btn" style="color: var(--text-primary);">Copy Text</button>
+                    <button class="btn btn-primary" id="post-tweet-btn" style="background: var(--twitter-blue); color: white;">Post on X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Area -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- App JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
