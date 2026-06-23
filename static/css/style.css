@@ -946,3 +946,111 @@ header {
     transform: translateY(8px);
   }
 }
+
+/* ==========================================
+   Light Mode Theme Overrides
+   ========================================== */
+body.light-mode {
+  --bg-dark: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f9fafb;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-focus: #0284c7;
+  
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  
+  --bq-blue-light: #0284c7;
+  
+  /* Adjusted category backgrounds for text legibility in light mode */
+  --color-feature-bg: rgba(16, 185, 129, 0.08);
+  --color-announcement-bg: rgba(14, 165, 233, 0.08);
+  --color-changed-bg: rgba(245, 158, 11, 0.08);
+  --color-fixed-bg: rgba(139, 92, 246, 0.08);
+  --color-deprecated-bg: rgba(239, 68, 68, 0.08);
+}
+
+/* Specific styling adjustments for light mode elements */
+body.light-mode header {
+  background: radial-gradient(circle at top right, rgba(2, 132, 199, 0.06), transparent 45%);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+body.light-mode .brand-title h1 {
+  background: linear-gradient(to right, #111827, #4b5563);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .search-input {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode .search-input:focus {
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.1);
+}
+
+body.light-mode .category-pill {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+body.light-mode .category-pill:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode .category-count {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+body.light-mode .card-body code {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1f2937;
+}
+
+body.light-mode .card-action-btn {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+body.light-mode .card-action-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .skeleton-line {
+  background: linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%);
+}
+
+body.light-mode .modal-overlay {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+body.light-mode .modal-container {
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+body.light-mode .tweet-textarea {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode .tweet-textarea:focus {
+  background: #ffffff;
+}
+
+body.light-mode .modal-footer {
+  background: rgba(0, 0, 0, 0.01);
+}
+
+body.light-mode .progress-ring__circle-bg {
+  stroke: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .toast {
+  background: #ffffff;
+  color: #1f2937;
+  border-right-color: rgba(0, 0, 0, 0.08);
+  border-top-color: rgba(0, 0, 0, 0.08);
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1);
+}

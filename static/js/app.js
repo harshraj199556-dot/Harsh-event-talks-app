@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = refreshBtn.querySelector('.refresh-icon');
     const exportCsvBtn = document.getElementById('export-csv-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const sunIcon = themeToggleBtn.querySelector('.sun-icon');
+    const moonIcon = themeToggleBtn.querySelector('.moon-icon');
     const searchInput = document.getElementById('search-input');
     const lastUpdatedEl = document.getElementById('last-updated');
     const totalCountEl = document.getElementById('total-count');
@@ -499,6 +502,38 @@ document.addEventListener('DOMContentLoaded', () => {
         
         showToast('Exported CSV successfully!');
     }
+
+    // Theme Management
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+        } else {
+            document.body.classList.remove('light-mode');
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+        }
+    }
+
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        
+        if (isLight) {
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+            showToast('Switched to Light Theme');
+        } else {
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+            showToast('Switched to Dark Theme');
+        }
+    }
+
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    initTheme();
 
     // Export click handler
     exportCsvBtn.addEventListener('click', exportToCSV);
