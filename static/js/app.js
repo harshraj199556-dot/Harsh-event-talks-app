@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedContainer = document.getElementById('feed-container');
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = refreshBtn.querySelector('.refresh-icon');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
     const searchInput = document.getElementById('search-input');
     const lastUpdatedEl = document.getElementById('last-updated');
     const totalCountEl = document.getElementById('total-count');
@@ -338,11 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-actions">
                     <button class="card-action-btn btn-copy-link" title="Copy Direct Link">
                         <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                        <span>Link</span>
+                        <span>Copy Link</span>
                     </button>
-                    <button class="card-action-btn btn-copy-text" title="Copy Raw Text">
+                    <button class="card-action-btn btn-copy-text" title="Copy Raw Text to Clipboard">
                         <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                        <span>Copy</span>
+                        <span>Copy Text</span>
                     </button>
                     <button class="card-action-btn btn-tweet" title="Compose Tweet">
                         <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -462,6 +463,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 refreshIcon.classList.remove('spinner');
             });
     }
+
+    // Export to CSV function
+    function exportToCSV() {
+        if (filteredNotes.length === 0) {
+            showToast('No updates to export', 'error');
+            return;
+        }
+
+        // CSV Header with UTF-8 BOM for Excel support
+        let csvContent = "\uFEFFDate,Category,Link,Update Text\n";
+
+        filteredNotes.forEach(note => {
+            // Escape double quotes and wrap in quotes
+            const date = `"${note.date.replace(/"/g, '""')}"`;
+            const category = `"${note.category.replace(/"/g, '""')}"`;
+            const link = `"${note.link.replace(/"/g, '""')}"`;
+            
+            // Clean up any newlines in text to keep CSV rows inline
+            const cleanText = note.text.replace(/\r?\n|\r/g, " ");
+            const text = `"${cleanText.replace(/"/g, '""')}"`;
+            
+            csvContent += `${date},${category},${link},${text}\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `bigquery_release_notes_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast('Exported CSV successfully!');
+    }
+
+    // Export click handler
+    exportCsvBtn.addEventListener('click', exportToCSV);
 
     // Refresh click handler
     refreshBtn.addEventListener('click', () => {
